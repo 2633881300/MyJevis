@@ -1,0 +1,64 @@
+/* MyJevis v0.2.0 设计令牌
+ * 只做浅色主题。所有颜色、间距、圆角集中在此，改皮肤只改这一个文件。
+ */
+:root {
+  /* 品牌色 */
+  --brand-50: #EEF0FF;
+  --brand-100: #E0E3FF;
+  --brand-200: #C7CBFB;
+  --brand-500: #6366F1;
+  --brand-600: #5457E5;
+  --brand-700: #4338CA;
+  --brand-grad: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+  --brand-soft: #F4F3FF;
+
+  /* 中性色 */
+  --bg: #F6F7FB;
+  --surface: #FFFFFF;
+  --surface-2: #FAFBFF;
+  --surface-3: #F3F4FA;
+  --border: #ECEEF5;
+  --border-strong: #DDE1EC;
+
+  --text-1: #1A1D26;
+  --text-2: #62677A;
+  --text-3: #9BA1B0;
+  --text-4: #C2C7D2;
+
+  /* 语义色 */
+  --ok-bg: #ECFDF5;
+  --ok-fg: #059669;
+  --warn-bg: #FFF7ED;
+  --warn-fg: #C2410C;
+  --danger: #EF4444;
+  --danger-bg: #FEF2F2;
+
+  /* 圆角 */
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 16px;
+  --r-pill: 999px;
+
+  /* 阴影 */
+  --shadow-sm: 0 1px 2px rgba(16, 24, 40, .04);
+  --shadow-md: 0 8px 24px rgba(16, 24, 40, .06);
+  --shadow-pop: 0 12px 32px rgba(16, 24, 40, .14);
+
+  /* 间距 */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+
+  /* 字体 */
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", "PingFang SC", sans-serif;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Courier New", monospace;
+
+  /* 布局 */
+  --topbar-h: 56px;
+  --sidebar-w: 232px;
+  --panel-w: 288px;
+  --radius-card: 16px;
+}

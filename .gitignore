@@ -1,0 +1,60 @@
+# ===== 密钥与环境配置 =====
+# 真实配置绝不入库，只提交 .env.example
+.env
+.env.local
+.env.*.local
+
+# ===== 本地数据（运行时生成，体积大且含用户内容）=====
+chroma/
+chroma_test/
+uploads/
+*.db
+*.sqlite3
+*.sqlite3-journal
+
+# ===== 日志与临时产物 =====
+*.log
+logs/
+*.zip
+*.tmp
+*.bak
+
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.venv/
+venv/
+env/
+build/
+dist/
+
+# ===== 测试与覆盖率 =====
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+
+# ===== IDE / 编辑器 =====
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# ===== 操作系统生成文件 =====
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ===== Node（当前无独立前端，保留以防后续引入构建链）=====
+node_modules/
+dist/
+.cache/
+
+# ===== 私人文档（本地保留，不入库）=====
+# 阶段1心得.md 是个人学习笔记，需求说明书.md 含本地路径，均不适合公开
+阶段1心得.md
+需求说明书.md

@@ -1,0 +1,38 @@
+# my_jevis 后端依赖
+# 环境：Python 3.13（开发时使用 conda 环境 Langgraph）
+# 安装：pip install -r requirements.txt
+
+# --- Web 框架 ---
+fastapi==0.135.1
+uvicorn==0.46.0
+python-multipart==0.0.32        # 文件上传（UploadFile）
+
+# --- 数据校验 / 配置 ---
+pydantic==2.14.2
+pydantic-settings==2.12.0
+
+# --- 数据库 ---
+SQLAlchemy==2.0.48
+PyMySQL==1.2.3
+
+# --- 认证 ---
+bcrypt==5.0.0                   # 密码哈希（不用 passlib，避免与 bcrypt 5.x 不兼容）
+python-jose==3.5.0              # JWT
+
+# --- Agent / LLM ---
+langchain==1.2.12
+langgraph==1.1.2
+langchain-openai==1.0.0         # ChatOpenAI（DeepSeek 兼容 OpenAI 协议）
+langchain-chroma==1.0.0
+langchain-text-splitters==1.0.0
+openai==2.26.0                  # 直接调用 embedding 接口
+
+# --- 文档解析 ---
+python-docx==1.2.0              # .docx（MIT）
+pypdf==6.10.2                   # 文本型 PDF（BSD-3-Clause）
+
+# --- 向量库 ---
+chromadb==1.5.9
+
+# --- 测试 ---
+pytest==9.0.3

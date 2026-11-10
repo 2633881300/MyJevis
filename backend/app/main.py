@@ -15,7 +15,7 @@ from fastapi.staticfiles import StaticFiles
 from app.db import init_db
 from app.routers import auth, chat, documents, knowledge_bases
 
-app = FastAPI(title="my_jevis API", version="0.1.0")
+app = FastAPI(title="my_jevis API", version="0.2.0")
 
 # 开发阶段放开跨域
 app.add_middleware(

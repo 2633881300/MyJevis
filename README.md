@@ -2,6 +2,8 @@
 
 基于 LangGraph 的多用户、多知识库 RAG 问答系统，内置一套轻量级可复用的 **Agent Harness**。
 
+当前版本 **v0.2.0**（前端重构：三栏工作台 / 知识库卡片 / 文档表格 / 详细模式）。
+
 ---
 
 ## 这个项目解决什么问题
@@ -41,7 +43,8 @@ MyJevis 的做法是把问答拆成两层 Agent：**Master Agent 负责判断"�
 - 公开知识库的跨用户动态检索
 - 全局记忆：查询自己的知识库目录、文档清单、用户画像
 - SSE 流式输出（只推送最终答案，不泄露中间过程）
-- 可视化操作界面（单页 HTML，由 FastAPI 托管）
+- 详细模式：走同步接口，展示**真实**的顶层工具调用（工具名 / 参数 / 结果摘要）
+- 可视化操作界面（Vue 3 单页，由 FastAPI 托管，无构建步骤）
 
 **未实现**（不要误认为已有）
 
@@ -63,7 +66,7 @@ MyJevis 的做法是把问答拆成两层 Agent：**Master Agent 负责判断"�
 | 业务库 | MySQL + SQLAlchemy | 用户、知识库、文档记录、用户画像 |
 | 认证 | python-jose + bcrypt | JWT 签发与密码哈希 |
 | 文档解析 | python-docx、pypdf | DOCX（含表格）、文本型 PDF |
-| 前端 | Vue 3（本地文件）+ 原生 CSS | 单页应用，无构建步骤 |
+| 前端 | Vue 3（本地文件）+ 原生 CSS | 模块化单页（css / js 分层），无构建步骤 |
 
 ---
 
@@ -222,7 +225,10 @@ my_jevis/
 │   │   ├── auth.py           JWT 与密码哈希
 │   │   ├── schemas.py        接口契约
 │   │   └── main.py           应用入口
-│   ├── static/               前端（单页，无构建步骤）
+│   ├── static/               前端（Vue 3 单页，无构建步骤）
+│   │   ├── index.html        页面骨架与脚本加载顺序
+│   │   ├── css/              设计令牌与组件样式
+│   │   └── js/               api / ui / store / views / app
 │   ├── tests/                pytest
 │   ├── .env.example
 │   └── requirements.txt
@@ -320,7 +326,15 @@ pytest tests/ -v
 
 `samples/` 目录下有两组示例文档（医药、财经），覆盖四种格式，可直接用于验证。
 
-> 截图占位：`docs/screenshots/`（待补充实际运行截图）
+![智能问答](docs/screenshots/chat.png)
+
+| 登录 | 知识库管理 |
+|---|---|
+| ![登录](docs/screenshots/login.png) | ![知识库管理](docs/screenshots/knowledge-bases.png) |
+
+| 文档管理 | 详细模式（真实工具调用） |
+|---|---|
+| ![文档管理](docs/screenshots/documents.png) | ![详细模式](docs/screenshots/chat-detail-mode.png) |
 
 ---
 
@@ -337,6 +351,36 @@ cd backend && pytest tests/ -v
 | `test_consistency.py` | 删除文档后检索不到；同名文件重复上传不覆盖 |
 | `test_stream_filter.py` | 中间文本与工具原文不会出现在流式输出中 |
 | `test_failure_modes.py` | 向量删除失败时接口 5xx 且 SQL 记录保留；解析失败不留记录；原始文件名保留 |
+
+### 前端 E2E（Playwright）
+
+```bash
+cd backend
+pip install -r requirements-test.txt
+python -m playwright install chromium
+
+pytest tests/e2e -q              # 91 项：90 通过 + 1 个外部调用用例默认跳过
+```
+
+| 文件 | 覆盖内容 |
+|---|---|
+| `test_a_boot.py` | 静态资源无 404、Vue 挂载、未登录/已登录视图、无未捕获异常 |
+| `test_b_auth.py` | 登录成功/失败、空值校验、注册校验、刷新保持、401 清理、退出 |
+| `test_c_kb.py` | 建库、名称校验、侧栏与卡片同步、改名、公开切换、删除确认与取消 |
+| `test_d_docs.py` | 表格渲染、切库、上传 txt/md、块数展示、删除、上传失败提示 |
+| `test_e_stream.py` | SSE 拼接、Enter/Shift+Enter、等待态、error 事件、连续提问、断网恢复 |
+| `test_f_detail.py` | 详细模式开关与持久化、真实步骤渲染、空步骤、失败态、无伪造时间戳 |
+| `test_g_switch.py` | 切库中途不丢答案、会话信息跟随、轨迹不重复堆积 |
+| `test_h_xss.py` | 5 类 HTML 注入不执行、表格/粗体渲染、工具参数转义 |
+| `test_i_responsive.py` | 5 种视口无横向溢出、面板断点、移动端抽屉、弹窗不出屏 |
+| `test_j_states.py` | UTC→本地时间、空列表、404/500/403 提示 |
+| `test_integration.py` | 真实后端：注册登录、知识库 CRUD、跨用户隔离（`.env` 之外的调用默认跳过） |
+
+其中 `test_a`~`test_j` 为 **Mock E2E**：由 Playwright 拦截 API，不需要 MySQL / Chroma / LLM；
+`test_integration.py` 会启动真实 uvicorn（库 `my_jevis_test` + 临时 Chroma 目录）。
+真实模型调用标记为 `external`，需 `RUN_EXTERNAL=1` 才执行。
+
+失败时自动在 `backend/tests/e2e/artifacts/` 留下截图与 DOM 快照（已被 `.gitignore` 忽略）。
 
 ---
 

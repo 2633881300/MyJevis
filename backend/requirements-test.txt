@@ -1,0 +1,8 @@
+# MyJevis E2E 测试额外依赖
+# 不影响 requirements.txt 中的运行时依赖，仅在跑浏览器测试时需要。
+#
+# 安装：
+#   pip install -r requirements-test.txt
+#   python -m playwright install chromium
+playwright==1.65.0
+pytest-playwright==0.10.0
